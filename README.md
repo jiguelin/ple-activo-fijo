@@ -23,7 +23,7 @@ Solo ejercicios **2022 en adelante**. La especificación completa está en
    - **Errores**: bloquean la descarga (ej. falta fecha de adquisición, código duplicado).
    - **Advertencias**: se puede descargar, pero conviene revisarlas (textos recortados,
      bajas incompletas, totales que no cuadran, activos anteriores a 2013).
-   - **Autocompletados**: valores que la app puso (GENERICO, fecha de uso, etc.).
+   - **Autocompletados**: valores que la app puso (`-` en marca/modelo/serie, fecha de uso, etc.).
 6. Descarga el **ZIP con los 3 TXT** e impórtalos en el PLE.
 7. El **reporte de revisión (Excel)** muestra línea por línea lo que se generó.
 
@@ -33,8 +33,8 @@ Solo ejercicios **2022 en adelante**. La especificación completa está en
 |---|---|
 | CUO / correlativo de asiento | Del Libro Diario (sub diario 09): `12.09.1` / `M1`. Sin diario: `AF1` / `M1`… |
 | Catálogo / tipo / estado del activo / estado de operación | `9` / `1` / `9` / `1` |
-| Marca o modelo vacíos | `GENERICO` (o `-`) |
-| Serie vacía | `GENERICO-01`, `GENERICO-02`… (o `-`) |
+| Marca o modelo vacíos | `-`, como indica SUNAT (opción: `GENERICO`) |
+| Serie vacía | `-`, como indica SUNAT (opción: `GENERICO-01`, `GENERICO-02`…) |
 | Fecha de inicio de uso vacía | Igual a la fecha de adquisición |
 | Método "LINEA RECTA" | `1` |
 | % depreciación `0.2` | `20.00` |

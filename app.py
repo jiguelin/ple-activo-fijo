@@ -102,9 +102,10 @@ with st.sidebar:
                                 value=int(archivo.ejercicio or 2024), step=1)
 
     st.header("Opciones del TXT")
-    texto_faltante = st.radio("Marca / modelo vacíos", ["GENERICO", "-"], horizontal=True)
-    serie_faltante = st.radio("Serie vacía", ["GENERICO-nn", "-"], horizontal=True,
-                              help="GENERICO-nn numera GENERICO-01, GENERICO-02…")
+    texto_faltante = st.radio("Marca / modelo vacíos", ["-", "GENERICO"], horizontal=True,
+                              help="SUNAT indica '-' cuando el dato no existe.")
+    serie_faltante = st.radio("Serie vacía", ["-", "GENERICO-nn"], horizontal=True,
+                              help="SUNAT indica '-' cuando no existe. GENERICO-nn numera GENERICO-01, GENERICO-02…")
     campo27 = st.radio("Campo 27 (doc. autorización) vacío", ["-", "correlativo"], horizontal=True,
                        help="'correlativo' pone 00000001, 00000002…")
     with st.expander("Avanzado"):

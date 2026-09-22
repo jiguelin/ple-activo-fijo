@@ -144,8 +144,8 @@ Reglas de lectura:
 | Línea del correlativo | `68` | Opción `39` |
 | Prefijo de CUO (sin diario) | `AF` | Ver campo 2 |
 | Prefijo correlativo de asiento | `M` | Debe empezar con A, M o C |
-| Texto por defecto marca / modelo | `GENERICO` | La estructura SUNAT indica `-` si no existe; ambas opciones en pantalla |
-| Serie por defecto | `GENERICO-01`, `GENERICO-02`… | O `-` |
+| Texto por defecto marca / modelo | `-` | Es lo que indica la estructura SUNAT si no existe; opción `GENERICO` |
+| Serie por defecto | `-` | Opción `GENERICO-01`, `GENERICO-02`… (no recomendado: no es una serie real) |
 | Campo 27 por defecto | `-` | Opción: correlativo de 8 dígitos (`00000001`) como en los TXT 2021 |
 | Llenar 7.3 manualmente | No | Si "Sí", se habilita la tabla del 7.3 (sección 6) |
 
@@ -168,7 +168,7 @@ Reglas de lectura:
 | 11 | Descripción | Col. D, máx. **40**. Contasis termina cada descripción con un correlativo (` 0001`); al truncar, **conservar ese sufijo**: `texto[:35] + " 0001"` (ej. "PIEZA DE MANO DENTAL MAS ACCESORIOS MARCA PANA MAX 0001" → "PIEZA DE MANO DENTAL MAS ACCESORIOS 0001"). Advertir |
 | 12 | Marca | Col. E, máx. 20; si vacío → valor por defecto |
 | 13 | Modelo | Col. F, máx. 20; si vacío → valor por defecto; si es número (2017) → texto "2017" |
-| 14 | Serie / placa | Col. G, máx. 30; si vacío → `GENERICO-nn` o `-` |
+| 14 | Serie / placa | Col. G, máx. 30; si vacío → `-` (opción `GENERICO-nn`) |
 | 15 | Saldo inicial | Col. H |
 | 16 | Adquisiciones / adiciones | Col. I |
 | 17 | Mejoras | Col. J |
@@ -374,7 +374,7 @@ desaparecen `060100050001` y `060900050001` sin retiro del costo.
 - Serie numérica `202109252` → `202109252` (sin `.0`); modelo `2017` → `2017`.
 - Código `040100020001` conserva el cero inicial.
 - Porcentaje `0.2` → `20.00`; "LINEA RECTA" → `1`.
-- Marca vacía → `GENERICO`; descripción de 50 caracteres → 40.
+- Marca/modelo/serie vacíos → `-` (o GENERICO si se elige); descripción de 50 caracteres → 40.
 - Línea generada tiene exactamente 37 campos + `|` final (7.1) y 15 + `|` (7.3).
 - Nombre de archivo 7.4 vacío = `LE{RUC}{AAAA}0000070400001011.txt` y tamaño 0 bytes.
 - Formato de TXT igual al TXT 2021 adjunto (misma estructura, CRLF, pipe final).

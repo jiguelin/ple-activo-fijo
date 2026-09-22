@@ -91,6 +91,10 @@ def test_valores_por_defecto_y_numeros_como_texto():
     _, res = generar_de("essentta_2024.xlsx")
     lineas = [l.split("|") for l in lineas_71(res)]
     escritorio = next(l for l in lineas if l[4] == "050100030001")
+    assert escritorio[11:14] == ["-", "-", "-"]              # por defecto: '-' como indica SUNAT
+    _, res = generar_de("essentta_2024.xlsx", texto_faltante="GENERICO", serie_faltante="GENERICO-nn")
+    lineas = [l.split("|") for l in lineas_71(res)]
+    escritorio = next(l for l in lineas if l[4] == "050100030001")
     assert escritorio[11:14] == ["GENERICO", "GENERICO", "GENERICO-01"]
     vitrina = next(l for l in lineas if l[4] == "050100080001")
     assert vitrina[12] == "2017"                # modelo numérico sin ".0"
@@ -99,9 +103,8 @@ def test_valores_por_defecto_y_numeros_como_texto():
 
 
 def test_opciones_guion():
-    _, res = generar_de("essentta_2024.xlsx", texto_faltante="-", serie_faltante="-", campo27="correlativo")
+    _, res = generar_de("essentta_2024.xlsx", campo27="correlativo")
     escritorio = next(l.split("|") for l in lineas_71(res) if "|050100030001|" in l)
-    assert escritorio[11:14] == ["-", "-", "-"]
     assert escritorio[26] == "00000002"
 
 

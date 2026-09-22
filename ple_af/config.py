@@ -43,8 +43,8 @@ class Config:
     moneda: str = "1"                      # 1 soles
     prefijo_cuo: str = "AF"
     prefijo_asiento: str = "M"             # A, M o C
-    texto_faltante: str = "GENERICO"       # marca/modelo faltante: "GENERICO" o "-"
-    serie_faltante: str = "GENERICO-nn"    # "GENERICO-nn" o "-"
+    texto_faltante: str = "-"              # marca/modelo faltante: "-" (SUNAT) o "GENERICO"
+    serie_faltante: str = "-"              # "-" (SUNAT) o "GENERICO-nn"
     campo27: str = "-"                     # "-" o "correlativo"
     subdiario: str = "09"                  # sub diario de Contasis con la depreciación
     linea_correlativo: str = "68"          # "68" (línea del gasto) o "39" (dep. acumulada)
