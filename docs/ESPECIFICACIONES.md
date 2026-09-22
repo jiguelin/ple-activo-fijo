@@ -165,7 +165,7 @@ Reglas de lectura:
 | 8 | Tipo de activo fijo (Tabla 18) | `1` = No revaluado o revaluado sin efecto tributario |
 | 9 | Cuenta contable | Col. C (solo dígitos, máx. 24) |
 | 10 | Estado del activo (Tabla 19) | `9` = Resto de activos (1 desuso, 2 obsoleto) |
-| 11 | Descripción | Col. D, máx. **40**. Contasis termina cada descripción con un correlativo (` 0001`); al truncar, **conservar ese sufijo**: `texto[:35] + " 0001"` (ej. "PIEZA DE MANO DENTAL MAS ACCESORIOS MARCA PANA MAX 0001" → "PIEZA DE MANO DENTAL MAS ACCESORIOS 0001"). Advertir |
+| 11 | Descripción | Col. D, máx. **40**. Se recorta sin partir palabras (ej. "ZHIYUN CRANE 4 COMBO, SMALLRING TRIPODE AD-80 0001" → "ZHIYUN CRANE 4 COMBO, SMALLRING TRIPODE"). Si dos activos quedan con la misma descripción recortada, a esos se les conserva el correlativo final de Contasis (` 0001`, ` 0002`). Advertir mostrando el texto original |
 | 12 | Marca | Col. E, máx. 20; si vacío → valor por defecto |
 | 13 | Modelo | Col. F, máx. 20; si vacío → valor por defecto; si es número (2017) → texto "2017" |
 | 14 | Serie / placa | Col. G, máx. 30; si vacío → `-` (opción `GENERICO-nn`) |

@@ -40,18 +40,27 @@ class Registro71:
     importes: dict = field(default_factory=dict)   # Decimales (para totales y 7.3)
     fecha_adquisicion: dt.date | None = None
     descripcion: str = ""
+    descripcion_original: str = ""
 
 
-def truncar_descripcion(texto: str, largo: int = C.LARGO_DESCRIPCION) -> str:
-    """Recorta conservando el correlativo final de Contasis (ej. ' 0001')."""
+def truncar_descripcion(texto: str, largo: int = C.LARGO_DESCRIPCION, conservar_sufijo: bool = False) -> str:
+    """Recorta a `largo` caracteres sin partir palabras.
+
+    Con `conservar_sufijo=True` mantiene el correlativo final de Contasis (ej. ' 0001');
+    se usa solo cuando dos activos quedarían con la misma descripción recortada.
+    """
     if len(texto) <= largo:
         return texto
-    m = re.search(r"\s(\d{3,5})$", texto)
-    if m:
-        sufijo = " " + m.group(1)
-        base = texto[: m.start()].rstrip()
-        return base[: largo - len(sufijo)].rstrip() + sufijo
-    return texto[:largo].rstrip()
+    if conservar_sufijo:
+        m = re.search(r"\s(\d{3,5})$", texto)
+        if m:
+            sufijo = " " + m.group(1)
+            base = truncar_descripcion(texto[: m.start()].rstrip(), largo - len(sufijo))
+            return base + sufijo
+    corte = texto[:largo]
+    if texto[largo] != " " and " " in corte:
+        corte = corte[: corte.rfind(" ")]
+    return corte.rstrip(" ,;-/")
 
 
 def _importe(activo, clave, obs, codigo) -> Decimal:
@@ -102,11 +111,13 @@ def construir_71(
 
         # --- Descripción (campo 11) ---
         descripcion = limpiar_texto(activo.get("descripcion"))
+        descripcion_original = descripcion
         if not descripcion:
             obs.error("Falta la descripción.", fila, codigo, "Descripción", col["descripcion"])
         elif len(descripcion) > C.LARGO_DESCRIPCION:
             corta = truncar_descripcion(descripcion)
-            obs.advertencia(f"Descripción de {len(descripcion)} caracteres recortada a 40: '{corta}'.",
+            obs.advertencia(f"Descripción de {len(descripcion)} caracteres recortada a 40: '{corta}' "
+                            f"(original: '{descripcion}').",
                             fila, codigo, "Descripción", col["descripcion"])
             descripcion = corta
 
@@ -292,11 +303,24 @@ def construir_71(
         ]
         assert len(campos) == 37
         registros.append(Registro71(fila, codigo, campos, {k: redondear(v) for k, v in imp.items()},
-                                    fecha_adq, descripcion))
+                                    fecha_adq, descripcion, descripcion_original))
 
     if len(f"{cfg.prefijo_cuo}{len(archivo.activos)}") > C.LARGO_CUO:
         obs.error("El prefijo del CUO es demasiado largo.")
     if not re.fullmatch(r"[AMC][A-Za-z0-9]*", cfg.prefijo_asiento or ""):
         obs.error("El prefijo del correlativo de asiento debe empezar con A, M o C.")
+    # Si dos activos quedan con la misma descripción recortada, se conserva su correlativo final
+    por_descripcion: dict[str, list[Registro71]] = {}
+    for r in registros:
+        por_descripcion.setdefault(r.campos[10], []).append(r)
+    for grupo in por_descripcion.values():
+        if len(grupo) < 2:
+            continue
+        for r in grupo:
+            if r.descripcion_original != r.campos[10]:
+                nueva = truncar_descripcion(r.descripcion_original, conservar_sufijo=True)
+                r.campos[10] = r.descripcion = nueva
+                obs.advertencia(f"Descripción recortada repetida con otro activo; se conservó el correlativo: '{nueva}'.",
+                                r.fila, r.codigo, "Descripción", col["descripcion"])
     return registros, obs
 

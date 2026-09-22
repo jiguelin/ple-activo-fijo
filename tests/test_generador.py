@@ -112,9 +112,24 @@ def test_descripciones_y_modelo_largos():
     _, res = generar_de("dental_2022.xlsx")
     lineas = [l.split("|") for l in lineas_71(res)]
     assert all(len(l[10]) <= 40 and len(l[11]) <= 20 and len(l[12]) <= 20 and len(l[13]) <= 30 for l in lineas)
-    assert "PIEZA DE MANO DENTAL MAS ACCESORIOS 0001" in [l[10] for l in lineas]
+    assert "PIEZA DE MANO DENTAL MAS ACCESORIOS" in [l[10] for l in lineas]   # sin partir palabras
+    # igual que el TXT validado de 2023: conserva la palabra completa
     assert truncar_descripcion("ZHIYUN CRANE 4 COMBO, SMALLRING TRIPODE AD-80 0001") == \
-        "ZHIYUN CRANE 4 COMBO, SMALLRING TRI 0001"
+        "ZHIYUN CRANE 4 COMBO, SMALLRING TRIPODE"
+    assert truncar_descripcion("ZHIYUN CRANE 4 COMBO, SMALLRING TRIPODE AD-80 0001", conservar_sufijo=True) == \
+        "ZHIYUN CRANE 4 COMBO, SMALLRING 0001"
+
+
+def test_descripciones_recortadas_repetidas_conservan_correlativo():
+    from ple_af.lector_contasis import ArchivoContasis
+    a = leer("econobrillo_2025.xlsx")
+    largo = "EQUIPO DE LIMPIEZA INDUSTRIAL MARCA KARCHER MODELO HD"
+    a.activos[1]["descripcion"] = largo + " 0001"
+    a.activos[2]["descripcion"] = largo + " 0002"
+    res = generar(a, Config(ruc=a.ruc, ejercicio=2025))
+    descs = [l.split("|")[10] for l in lineas_71(res)]
+    assert descs[1].endswith(" 0001") and descs[2].endswith(" 0002") and descs[1] != descs[2]
+    assert all(len(d) <= 40 for d in descs)
 
 
 def test_advertencias_dental_2022():

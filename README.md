@@ -39,7 +39,7 @@ Solo ejercicios **2022 en adelante**. La especificación completa está en
 | Método "LINEA RECTA" | `1` |
 | % depreciación `0.2` | `20.00` |
 | Documento de autorización vacío | `-` (o correlativo `00000001`) |
-| Descripción > 40 caracteres | Se recorta conservando el correlativo final (` 0001`) |
+| Descripción > 40 caracteres | Se recorta a 40 sin partir palabras; solo si dos activos quedaran iguales se conserva su correlativo (` 0001`) |
 
 ## Desarrollo local (opcional)
 
