@@ -106,7 +106,7 @@ with st.sidebar:
     serie_faltante = st.radio("Serie vacía", ["GENERICO-nn", "-"], horizontal=True,
                               help="GENERICO-nn numera GENERICO-01, GENERICO-02…")
     campo27 = st.radio("Campo 27 (doc. autorización) vacío", ["-", "correlativo"], horizontal=True,
-                       help="'correlativo' pone 00000001, 00000002… como en los TXT de 2021.")
+                       help="'correlativo' pone 00000001, 00000002…")
     with st.expander("Avanzado"):
         formato_periodo = st.selectbox("Campo 1 (periodo)", ["AAAA0000", "AAAA1200"])
         prefijo_cuo = st.text_input("Prefijo del CUO", value="AF", max_chars=10)
@@ -154,7 +154,7 @@ st.subheader("Formato 7.3 – Diferencia de cambio")
 st.caption(
     "Desde 2013 la diferencia de cambio ya no se suma al costo del activo (se derogó el art. 61 inc. f "
     "de la LIR), así que el 7.3 va **vacío** aunque las compras hayan sido en dólares. "
-    "Actívalo solo si tu contador indica que corresponde."
+    "Actívalo solo si en tu caso corresponde (por ejemplo, activos antiguos con diferencia de cambio en su costo)."
 )
 datos_me: list[DatoME] = []
 tc_cierre = None
@@ -235,3 +235,10 @@ else:
 st.download_button("Descargar reporte de revisión (Excel)", data=reporte_excel(resultado, cfg),
                    file_name=f"{base_nombre}_revision.xlsx",
                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+st.divider()
+st.caption(
+    "Herramienta interna de apoyo para generar los TXT del PLE a partir de exportaciones de Contasis. "
+    "Los archivos se procesan en memoria y no se guardan. Revisa las observaciones y valida los TXT en el "
+    "PLE antes de enviarlos; la responsabilidad de la información declarada es del contribuyente."
+)
